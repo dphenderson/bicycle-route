@@ -1,16 +1,20 @@
 (function(window, document, undefined) {
   var width = window.innerWidth,
       height = window.innerHeight,
+	  proj = d3.geo.albers(),
+	  path = d3.geo.path().projection(proj),
       svg = d3.select('body').append('svg').attr('width', width).attr('height', height);
 
       d3.json('/assets/json/north_america.json', function(error, na) {
         if (error) {
           throw error;
         }
+		var states_passed = ['VA', 'KY', 'IN', 'IL', 'IA', 'NE', 'WY', 'ID', 'OR', 'CA'];
 
-        svg.append('path').datum(topojson.feature(na, na.objects.north_america)).attr('d', d3.geo.path().projection(d3.geo.mercator()));
-        svg.append('path').datum(topojson.feature(na, na.objects.usa)).attr('d', d3.geo.path().projection(d3.geo.mercator()));
-        svg.append('path').datum(topojson.feature(na, na.objects.waypoints)).attr('d', d3.geo.path().projection(d3.geo.mercator())).attr('fill', 'red');
-        svg.append('path').datum(topojson.mesh(na, na.objects.routes)).attr('d', d3.geo.path().projection(d3.geo.mercator())).attr('fill', 'none').attr('stroke', 'white');
+		svg.selectAll('.state').data(topojson.feature(na, na.objects.usa).features.filter(function(d) { return states_passed.includes(d.id); })).enter().append('path').attr('id', function(d) { return d.id; }).attr('class', function(d) { return 'state ' + d.id; }).attr('d', path);
+        svg.append('path').datum(topojson.mesh(na, na.objects.north_america)).attr('d', path).attr('class', 'intl-boundaries');
+        svg.append('path').datum(topojson.mesh(na, na.objects.usa)).attr('d', path).attr('class', 'state-boundaries');
+        svg.append('path').datum(topojson.feature(na, na.objects.waypoints)).attr('d', path.pointRadius(2)).attr('class', 'waypoint');
+        svg.append('path').datum(topojson.mesh(na, na.objects.routes)).attr('d', path).attr('class', 'route');
       });
 })(window, document);

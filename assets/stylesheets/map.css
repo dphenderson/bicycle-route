@@ -2,3 +2,17 @@ body {
   margin:0;
   padding:0;
 }
+.intl-boundaries, .state-boundaries {
+  fill:none;
+  stroke-dasharray:4,4;
+  stroke-linejoin:round;
+}
+.intl-boundaries { stroke:#aaa; }
+.state-boundaries { stroke:#777; }
+.route {
+  fill:none;
+  stroke:blue;
+  stroke-width:0.25;
+}
+.waypoint { fill:red; }
+.state { fill:#cdd; }

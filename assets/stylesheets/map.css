@@ -4,7 +4,7 @@ body {
 }
 .intl-boundaries, .state-boundaries {
   fill:none;
-  stroke-dasharray:4,4;
+  stroke-dasharray:6,2;
   stroke-linejoin:round;
 }
 .intl-boundaries { stroke:#aaa; }
